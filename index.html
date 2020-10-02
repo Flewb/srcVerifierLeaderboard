@@ -41,6 +41,8 @@
 		</table>
 	</div>
 	<script type="text/javascript">
+	id = "snake_game"
+		
 	function swap(json) {
 		var ret = {};
 		for (var key in json) {
@@ -72,7 +74,7 @@
         return newObject;
       }
 	let xhr = new XMLHttpRequest();
-	xhr.open("GET", "https://www.speedrun.com/api/v1/games/yd4ovvg1", false);
+	xhr.open("GET", "https://www.speedrun.com/api/v1/games/" + id, false);
 	xhr.send();
 	moderators = []
 	runsVerified = []
@@ -82,34 +84,19 @@
 	}
 	let xhr2 = new XMLHttpRequest();
 	for (var i = moderators.length - 1; i >= 0; i--) {
-		xhr2.open("GET", "https://www.speedrun.com/api/v1/runs?game=yd4ovvg1&max=200&examiner=" + moderators[i], false);
+		xhr2.open("GET", "https://www.speedrun.com/api/v1/runs?game=" + id + "&max=200&examiner=" + moderators[i], false);
 		xhr2.send();
 		runs = JSON.parse(xhr2.responseText)
-		runsVerifiedNumberMcbe = runs.pagination.size
+		runsVerifiedNumber = runs.pagination.size
 		do {
 			if (runs.pagination.size == 200) {
-				xhr2.open("GET", "https://www.speedrun.com/api/v1/runs?game=yd4ovvg1&max=200&examiner=" + moderators[i] + "&offset=" + runsVerifiedNumberMcbe, false);
+				xhr2.open("GET", "https://www.speedrun.com/api/v1/runs?game=" + id + "&max=200&examiner=" + moderators[i] + "&offset=" + runsVerifiedNumber, false);
 				xhr2.send();
 				runs = JSON.parse(xhr2.responseText)
-				runsVerifiedNumberMcbe += runs.pagination.size
+				runsVerifiedNumber += runs.pagination.size
 			}
 
 		} while (runs.pagination.size == 200)
-
-		xhr2.open("GET", "https://www.speedrun.com/api/v1/runs?game=v1po7r76&max=200&examiner=" + moderators[i], false);
-		xhr2.send();
-		runs = JSON.parse(xhr2.responseText)
-		runsVerifiedNumberMcbece = runs.pagination.size
-		do {
-			if (runs.pagination.size == 200) {
-				xhr2.open("GET", "https://www.speedrun.com/api/v1/runs?game=v1po7r76&max=200&examiner=" + moderators[i] + "&offset=" + runsVerifiedNumberMcbece, false);
-				xhr2.send();
-				runs = JSON.parse(xhr2.responseText)
-				runsVerifiedNumberMcbece += runs.pagination.size
-			}
-		} while (runs.pagination.size == 200)
-
-		runsVerifiedNumber = runsVerifiedNumberMcbe + runsVerifiedNumberMcbece
 
 		runsVerified.push(runsVerifiedNumber)
 	}
